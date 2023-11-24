@@ -16,6 +16,7 @@ namespace Celeste.Mod.TeraHelper.Entities
         public TeraType tera { get; set; }
         public TeraEffect EffectAsAttacker(TeraType t);
         public TeraEffect EffectAsDefender(TeraType t);
+        public void ChangeTera(TeraType newTera);
     }
     public static class TeraBlock
     {
@@ -170,7 +171,8 @@ namespace Celeste.Mod.TeraHelper.Entities
             {
                 Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on spring collide player at {cursor.Index} in IL for {cursor.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(PlayerUseSpring);
+                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitDelegate(ActorUseSpring);
                 cursor.Index += 2;
             }
         }
@@ -181,7 +183,8 @@ namespace Celeste.Mod.TeraHelper.Entities
             {
                 Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on spring collide holdable at {cursor.Index} in IL for {cursor.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(OthersUseSpring);
+                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitDelegate(HoldableUseSpring);
             }
         }
         private static void SpringOnPuffer(ILContext il)
@@ -191,7 +194,8 @@ namespace Celeste.Mod.TeraHelper.Entities
             {
                 Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on spring collide puffer at {cursor.Index} in IL for {cursor.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(OthersUseSpring);
+                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitDelegate(ActorUseSpring);
             }
         }
         private static void SpringOnSeeker(ILContext il)
@@ -201,18 +205,19 @@ namespace Celeste.Mod.TeraHelper.Entities
             {
                 Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on spring collide seeker at {cursor.Index} in IL for {cursor.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(OthersUseSpring);
+                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitDelegate(ActorUseSpring);
             }
         }
-        private static void PlayerUseSpring(Spring spring)
+        private static void ActorUseSpring(Spring spring, Actor actor)
         {
             var data = DynamicData.For(spring);
-            data.Set("PlayerUsed", true);
+            data.Set("User", actor);
         }
-        private static void OthersUseSpring(Spring spring)
+        private static void HoldableUseSpring(Spring spring, Holdable holdable)
         {
             var data = DynamicData.For(spring);
-            data.Set("PlayerUsed", false);
+            data.Set("User", holdable.Entity);
         }
         private static void CheckDangerousSpikes(ILContext il)
         {

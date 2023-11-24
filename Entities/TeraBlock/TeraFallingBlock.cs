@@ -46,11 +46,15 @@ namespace Celeste.Mod.TeraHelper.Entities
             if (sm.Entity is Spring spring)
             {
                 var springData = DynamicData.For(spring);
-                var playerUse = springData.Get<bool>("PlayerUsed");
-                if (playerUse)
+                var user = springData.Get<Entity>("User");
+                if (user is Player player)
                 {
-                    var player = SceneAs<Level>().Tracker.GetEntity<Player>();
                     lastEffect = player != null ? EffectAsAttacker(player.GetTera()) : TeraEffect.Normal;
+                    return;
+                }
+                else if (user is TeraCrystal crystal)
+                {
+                    lastEffect = crystal != null ? EffectAsAttacker(crystal.tera) : TeraEffect.Normal;
                     return;
                 }
             }
@@ -91,6 +95,26 @@ namespace Celeste.Mod.TeraHelper.Entities
                 cursor.EmitDelegate(GetSpeedMultipler);
                 cursor.Emit(OpCodes.Mul);
             }
+            cursor.Index = cursor.Instrs.Count - 1;
+            if (cursor.TryGotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Brtrue_S))
+            {
+                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on falling block restart at {cursor.Index} in IL for {cursor.Method.Name}");
+                cursor.Index--;
+                cursor.Emit(OpCodes.Ldloc_1);
+                cursor.EmitDelegate(UnableToCrush);
+                cursor.Emit(OpCodes.And);
+            }
+        }
+        private static bool UnableToCrush(FallingBlock block)
+        {
+            var platform = block.CollideFirst<Platform>(block.Position + Vector2.UnitY);
+            if (platform == null)
+                return true;
+            if (block is TeraFallingBlock teraBlock && platform is TeraDashBlock teraDash)
+            {
+                return teraBlock.EffectAsAttacker(teraDash.tera) != TeraEffect.Super;
+            }
+            return true;
         }
         private static void TeraCrushSequence(ILContext il)
         {
@@ -157,6 +181,11 @@ namespace Celeste.Mod.TeraHelper.Entities
         public TeraEffect EffectAsDefender(TeraType t)
         {
             return TeraUtil.GetEffect(t, tera);
+        }
+        public void ChangeTera(TeraType newTera)
+        {
+            tera = newTera;
+            image.Texture = GFX.Game[TeraUtil.GetImagePath(tera)];
         }
     }
 }

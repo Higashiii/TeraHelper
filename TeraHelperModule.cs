@@ -41,6 +41,7 @@ namespace Celeste.Mod.TeraHelper
             TeraSwapBlock.OnLoad();
             TeraCrushBlock.OnLoad();
             TeraBounceBlock.OnLoad();
+            TeraCrystal.OnLoad();
         }
         public override void Unload()
         {
@@ -57,6 +58,7 @@ namespace Celeste.Mod.TeraHelper
             TeraSwapBlock.OnUnload();
             TeraCrushBlock.OnUnload();
             TeraBounceBlock.OnUnload();
+            TeraCrystal.OnUnload();
         }
         public static void Debug(string message)
         {

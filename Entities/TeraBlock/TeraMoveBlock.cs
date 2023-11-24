@@ -43,11 +43,15 @@ namespace Celeste.Mod.TeraHelper.Entities
             if (sm.Entity is Spring spring)
             {
                 var springData = DynamicData.For(spring);
-                var playerUse = springData.Get<bool>("PlayerUsed");
-                if (playerUse)
+                var user = springData.Get<Entity>("User");
+                if (user is Player player)
                 {
-                    var player = SceneAs<Level>().Tracker.GetEntity<Player>();
                     lastEffect = player != null ? EffectAsAttacker(player.GetTera()) : TeraEffect.Normal;
+                    return;
+                }
+                else if (user is TeraCrystal crystal)
+                {
+                    lastEffect = crystal != null ? EffectAsAttacker(crystal.tera) : TeraEffect.Normal;
                     return;
                 }
             }
@@ -117,6 +121,11 @@ namespace Celeste.Mod.TeraHelper.Entities
         public TeraEffect EffectAsDefender(TeraType t)
         {
             return TeraUtil.GetEffect(t, tera);
+        }
+        public void ChangeTera(TeraType newTera)
+        {
+            tera = newTera;
+            image.Texture = GFX.Game[TeraUtil.GetImagePath(tera)];
         }
     }
 }

@@ -83,5 +83,10 @@ namespace Celeste.Mod.TeraHelper.Entities
         {
             return TeraUtil.GetEffect(t, tera);
         }
+        public void ChangeTera(TeraType newTera)
+        {
+            tera = newTera;
+            image.Texture = GFX.Game[TeraUtil.GetImagePath(tera)];
+        }
     }
 }

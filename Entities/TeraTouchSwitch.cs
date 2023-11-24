@@ -45,9 +45,11 @@ public class TeraTouchSwitch : TouchSwitch
 
     private void OnHoldable(Holdable h)
     {
-        var player = Scene.Tracker.GetEntity<Player>();
-        if (EffectAsDefender(player.GetTera()) == TeraEffect.Super)
-            TurnOn();
+        if (h.Entity is TeraCrystal crystal)
+        {
+            if (EffectAsDefender(crystal.tera) == TeraEffect.Super)
+                TurnOn();
+        }
     }
     private void OnSeeker(Seeker s)
     {
