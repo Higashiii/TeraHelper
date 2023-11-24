@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+	<TeraHelper_teraPlayer path="TeraHelper/objects/tera/Player/" start="Normal">
+        <Justify x="0.5" y="0.5"/>
+        <Loop id="Normal" path="Normal" delay="0"/>
+        <Loop id="Fire" path="Fire" delay="0"/>
+        <Loop id="Water" path="Water" delay="0"/>
+        <Loop id="Grass" path="Grass" delay="0"/>
+        <Loop id="Electric" path="Electric" delay="0"/>
+        <Loop id="Bug" path="Bug" delay="0"/>
+        <Loop id="Poison" path="Poison" delay="0"/>
+        <Loop id="Psychic" path="Psychic" delay="0"/>
+        <Loop id="Ghost" path="Ghost" delay="0"/>
+        <Loop id="Steel" path="Steel" delay="0"/>
+        <Loop id="Rock" path="Rock" delay="0"/>
+        <Loop id="Ground" path="Ground" delay="0"/>
+        <Loop id="Fighting" path="Fighting" delay="0"/>
+        <Loop id="Flying" path="Flying" delay="0"/>
+        <Loop id="Dragon" path="Dragon" delay="0"/>
+        <Loop id="Ice" path="Ice" delay="0"/>
+        <Loop id="Dark" path="Dark" delay="0"/>
+        <Loop id="Fairy" path="Fairy" delay="0"/>
+    </TeraHelper_teraPlayer>
+</Sprites>
