@@ -76,12 +76,12 @@ namespace Celeste.Mod.TeraHelper.Entities
         private static void TeraFallCheck(ILContext il)
         {
             ILCursor cursor = new ILCursor(il);
-            //if HasPlayerRider && PlayerActive
+            //if HasPlayerRider && PlayerActivate
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Solid>("HasPlayerRider") || instr.MatchCall<Solid>("HasPlayerOnTop")))
             {
                 Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on falling block check at {cursor.Index} in IL for {cursor.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(PlayerActive);
+                cursor.EmitDelegate(PlayerActivate);
                 cursor.Emit(OpCodes.And);
             }
         }
@@ -147,7 +147,7 @@ namespace Celeste.Mod.TeraHelper.Entities
                 }
             }
         }
-        private static bool PlayerActive(FallingBlock block)
+        private static bool PlayerActivate(FallingBlock block)
         {
             if (block is not TeraFallingBlock teraBlock)
                 return true;

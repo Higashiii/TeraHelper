@@ -39,16 +39,4 @@ public static class Commands
             }
         }
     }
-    [Command("TeraTest", "Check Tera Session")]
-    private static void CmdTeraTest()
-    {
-        if (Engine.Scene is not Level level)
-        {
-            return;
-        }
-        var player = level.Tracker.GetEntity<Player>();
-        Engine.Commands.Log($"{player.LiftSpeed}, {player.LiftSpeed.Length()}");
-        var data = DynamicData.For(player);
-        Engine.Commands.Log($"{data.Get<Vector2>("LiftBoost")}");
-    }
 }

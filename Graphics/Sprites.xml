@@ -26,4 +26,12 @@
         <Loop id="idle" path="idle" delay="0.08"/>
         <Anim id="shatter" path="shatter" delay="0.08"/>
     </TeraHelper_teraCrystal>
+    <TeraHelper_goomy path="TeraHelper/objects/tera/Goomy/" start="idle">
+        <Justify x="0.5" y="1"/>
+        <Loop id="idle" path="goomy" delay="0.03"/>
+    </TeraHelper_goomy>
+    <TeraHelper_goomyShiny path="TeraHelper/objects/tera/Goomy/" start="idle">
+        <Justify x="0.5" y="1"/>
+        <Loop id="idle" path="goomy_s" delay="0.03"/>
+    </TeraHelper_goomyShiny>
 </Sprites>

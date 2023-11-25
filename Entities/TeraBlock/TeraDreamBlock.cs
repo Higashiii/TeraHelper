@@ -53,7 +53,7 @@ namespace Celeste.Mod.TeraHelper.Entities
                 ILLabel label = null;
                 cursor.GotoNext(MoveType.After, instr => instr.MatchBrfalse(out label));
                 cursor.Emit(OpCodes.Ldloc_0);
-                cursor.EmitDelegate(PlayerActive);
+                cursor.EmitDelegate(PlayerActivate);
                 cursor.Emit(OpCodes.Brfalse, label);
             }
         }
@@ -69,7 +69,7 @@ namespace Celeste.Mod.TeraHelper.Entities
                     Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on dream dash into solid at {cursor.Index} in IL for {cursor.Method.Name}");
                     cursor.MoveAfterLabels();
                     cursor.Emit(OpCodes.Ldloc_1);
-                    cursor.EmitDelegate(PlayerActive);
+                    cursor.EmitDelegate(PlayerActivate);
                     cursor.Emit(OpCodes.Brfalse, labelIntoSolid);
                     cursor.MoveBeforeLabels();
                 }
@@ -97,7 +97,7 @@ namespace Celeste.Mod.TeraHelper.Entities
             }
             return orig(self);
         }
-        private static bool PlayerActive(DreamBlock block)
+        private static bool PlayerActivate(DreamBlock block)
         {
             if (block is not TeraDreamBlock teraBlock)
                 return true;

@@ -71,11 +71,11 @@ namespace Celeste.Mod.TeraHelper.Entities
             ILCursor cursor = new ILCursor(il);
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<Solid>("HasPlayerRider")))
             {
-                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on zip mover active at {cursor.Index} in IL for {cursor.Method.Name}");
+                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on zip mover activate at {cursor.Index} in IL for {cursor.Method.Name}");
                 ILLabel label = null;
                 cursor.GotoNext(MoveType.After, instr => instr.MatchBrfalse(out label));
                 cursor.Emit(OpCodes.Ldloc_1);
-                cursor.EmitDelegate(PlayerActive);
+                cursor.EmitDelegate(PlayerActivate);
                 cursor.Emit(OpCodes.Brfalse, label);
             }
             cursor.Index = 0;
@@ -87,7 +87,7 @@ namespace Celeste.Mod.TeraHelper.Entities
                 cursor.Emit(OpCodes.Mul);
             }
         }
-        private static bool PlayerActive(MoveBlock block)
+        private static bool PlayerActivate(MoveBlock block)
         {
             if (block is not TeraMoveBlock teraBlock)
                 return true;

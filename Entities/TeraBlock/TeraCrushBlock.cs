@@ -32,15 +32,15 @@ namespace Celeste.Mod.TeraHelper.Entities
         }
         public static void OnLoad()
         {
-            On.Celeste.CrushBlock.CanActivate += TeraCanActive;
+            On.Celeste.CrushBlock.CanActivate += TeraCanActivate;
             sequenceHook = new ILHook(typeof(CrushBlock).GetMethod("AttackSequence", BindingFlags.NonPublic | BindingFlags.Instance).GetStateMachineTarget(), TeraSequence);
         }
         public static void OnUnload()
         {
-            On.Celeste.CrushBlock.CanActivate -= TeraCanActive;
+            On.Celeste.CrushBlock.CanActivate -= TeraCanActivate;
             sequenceHook?.Dispose();
         }
-        private static bool TeraCanActive(On.Celeste.CrushBlock.orig_CanActivate orig, CrushBlock self, Vector2 direction)
+        private static bool TeraCanActivate(On.Celeste.CrushBlock.orig_CanActivate orig, CrushBlock self, Vector2 direction)
         {
             var res = orig(self, direction);
             if (res && self is TeraCrushBlock teraCrush)

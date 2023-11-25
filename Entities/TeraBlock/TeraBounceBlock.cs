@@ -49,15 +49,15 @@ namespace Celeste.Mod.TeraHelper.Entities
             cursor.Index = 0;
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchStloc(2)))
             {
-                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on bounce block active at {cursor.Index} in IL for {cursor.Method.Name}");
+                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on bounce block activate at {cursor.Index} in IL for {cursor.Method.Name}");
                 ILLabel label = null;
                 cursor.GotoNext(MoveType.After, instr => instr.MatchBrfalse(out label));
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate(PlayerActive);
+                cursor.EmitDelegate(PlayerActivate);
                 cursor.Emit(OpCodes.Brfalse, label);
             }
         }
-        private static bool PlayerActive(BounceBlock block)
+        private static bool PlayerActivate(BounceBlock block)
         {
             if (block is not TeraBounceBlock teraBlock)
                 return true;
