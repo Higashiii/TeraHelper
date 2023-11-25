@@ -29,6 +29,8 @@ namespace Celeste.Mod.TeraHelper.Entities
             Add(image = new Image(GFX.Game[TeraUtil.GetImagePath(tera)]));
             image.CenterOrigin();
             image.Position = new Vector2(data.Width / 2, data.Height / 2);
+            var bloom = Get<BloomPoint>();
+            bloom.Alpha = 0.3f;
         }
         public static void OnLoad()
         {
