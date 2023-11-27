@@ -127,7 +127,7 @@ public class Goomy : Entity
     public override void Update()
     {
         base.Update();
-        var rand = new Random((int)(player.Position.X + player.Position.Y));
+        var rand = new Random((int)(player.Position.X + player.Position.Y + X));
         var joy = happiness;
         if (joy == 3)
             OpenGate();
@@ -157,7 +157,7 @@ public class Goomy : Entity
             if (Math.Abs(X - target) < 0.001f)
             {
                 X = target;
-                idleTimer = 10f + rand.Next() % 15;
+                idleTimer = 5f + rand.Next() % 15;
             }
         }
         if (CollideCheck<Player>())

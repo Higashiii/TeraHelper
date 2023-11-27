@@ -135,6 +135,9 @@ public class TeraRefill : Entity
                 return;
             if (effect == TeraEffect.Bad || (effect == TeraEffect.Normal && !player.DashAttacking))
             {
+                //keep this as a feature
+                //if (player.StateMachine.State == 5)
+                //    player.StateMachine.State = 0;
                 player.PointBounce(Center);
                 moveWiggle.Start();
                 moveWiggleDir = (Center - player.Center).SafeNormalize(Vector2.UnitY);

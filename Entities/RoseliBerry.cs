@@ -41,7 +41,7 @@ public class RoseliBerry : Actor
         onCollideV = OnCollideV;
         LiftSpeedGraceTime = 0.1f;
         Add(new VertexLight(Collider.Center, Color.White, 1f, 32, 64));
-        Tag = Tags.TransitionUpdate;
+        //Tag = Tags.TransitionUpdate;
         Add(new MirrorReflection());
         Hold.SpeedSetter = delegate (Vector2 speed)
         {

@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
+using System.Runtime.InteropServices.ComTypes;
+using System;
 
 namespace Celeste.Mod.TeraHelper.Entities
 {
@@ -50,6 +52,8 @@ namespace Celeste.Mod.TeraHelper.Entities
                     if (effect != TeraEffect.Super)
                     {
                         if (player.StateMachine.State == 10)
+                            player.StateMachine.State = 0;
+                        if (player.InTeraBooster() && (direction.Y < 0f || direction.Y > 0f) && player.StateMachine.State == 5)
                             player.StateMachine.State = 0;
                         return DashCollisionResults.NormalOverride;
                     }

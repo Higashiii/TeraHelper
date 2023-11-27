@@ -83,6 +83,8 @@ public class GoomyGate : Solid
     public void Open()
     {
         open = true;
+        SoundEmitter.Play("event:/game/general/touchswitch_last_oneshot");
+        Add(new SoundSource("event:/game/general/touchswitch_last_cutoff"));
     }
 
     private IEnumerator Sequence(Vector2 node)

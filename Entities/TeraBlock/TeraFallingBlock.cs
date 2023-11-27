@@ -121,7 +121,9 @@ namespace Celeste.Mod.TeraHelper.Entities
             ILCursor cursor = new ILCursor(il);
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchStfld<FallingBlock>("Triggered")))
             {
-                var current = cursor.Index;
+                var current = cursor.Index - 3;
+                ILLabel label = null;
+                cursor.GotoNext(MoveType.After, instr => instr.MatchBr(out label));
                 if (cursor.TryGotoPrev(MoveType.After, instr => instr.OpCode == OpCodes.Stloc_S && (((VariableDefinition)instr.Operand).Index == 5)))
                 {
                     VariableDefinition variable = (VariableDefinition)cursor.Prev.Operand;
@@ -130,22 +132,29 @@ namespace Celeste.Mod.TeraHelper.Entities
                     cursor.Emit(OpCodes.Ldloc_S, variable);
                     cursor.Emit(OpCodes.Ldloc_1);
                     cursor.EmitDelegate(CrushTrigger);
+                    cursor.Emit(OpCodes.Brfalse, label);
                 }
             }
         }
-        private static void CrushTrigger(FallingBlock falling, CrushBlock crush)
+        private static bool CrushTrigger(FallingBlock falling, CrushBlock crush)
         {
             if (falling is TeraFallingBlock teraFalling)
             {
                 if (crush is TeraCrushBlock teraCrush)
                 {
-                    teraFalling.lastEffect = teraFalling.EffectAsDefender(teraCrush.tera);
+                    var effect = teraFalling.EffectAsDefender(teraCrush.tera);
+                    if (effect == TeraEffect.None)
+                        return false;
+                    teraFalling.lastEffect = effect;
+                    return true;
                 }
                 else
                 {
                     teraFalling.lastEffect = TeraEffect.Normal;
+                    return true;
                 }
             }
+            return true;
         }
         private static bool PlayerActivate(FallingBlock block)
         {
