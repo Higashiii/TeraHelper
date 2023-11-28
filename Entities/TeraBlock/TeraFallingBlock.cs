@@ -140,6 +140,10 @@ namespace Celeste.Mod.TeraHelper.Entities
         {
             if (falling is TeraFallingBlock teraFalling)
             {
+                var data = DynamicData.For(falling);
+                bool playerActive = (bool)data.Invoke("PlayerFallCheck");
+                if (teraFalling.Triggered || teraFalling.HasStartedFalling || playerActive)
+                    return true;
                 if (crush is TeraCrushBlock teraCrush)
                 {
                     var effect = teraFalling.EffectAsDefender(teraCrush.tera);
