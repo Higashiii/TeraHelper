@@ -77,12 +77,6 @@ namespace Celeste.Mod.TeraHelper.Entities
         }
         private static int TeraDreamUpdateSpeed(On.Celeste.Player.orig_DreamDashUpdate orig, Player self)
         {
-            var dir = new Vector2(Math.Sign(self.Speed.X), Math.Sign(self.Speed.Y));
-            if (dir.Length() > 1)
-            {
-                dir = dir.SafeNormalize();
-            }
-            self.Speed = 240f * dir;
             var playerData = DynamicData.For(self);
             if (playerData.TryGet("dreamBlock", out DreamBlock dream))
             {
@@ -90,6 +84,12 @@ namespace Celeste.Mod.TeraHelper.Entities
                 {
                     if (teraDream != null)
                     {
+                        var dir = new Vector2(Math.Sign(self.Speed.X), Math.Sign(self.Speed.Y));
+                        if (dir.Length() > 1)
+                        {
+                            dir = dir.SafeNormalize();
+                        }
+                        self.Speed = 240f * dir;
                         var effect = teraDream.EffectAsDefender(self.GetTera());
                         self.Speed *= GetSpeedMultipler(effect);
                     }
