@@ -1,5 +1,5 @@
 - Name: TeraHelper
-  Version: 1.0.3
+  Version: 1.0.4
   DLL: bin/TeraHelper.dll
   Dependencies:
     - Name: Everest

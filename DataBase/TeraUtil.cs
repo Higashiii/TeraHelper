@@ -1,5 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.Helpers;
+using Microsoft.Xna.Framework;
+using Monocle;
+using MonoMod.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Celeste.Mod.TeraHelper.DataBase
 {
@@ -65,57 +70,185 @@ namespace Celeste.Mod.TeraHelper.DataBase
                 _ => Color.White,
             };
         }
-        private static Dictionary<TeraType, HashSet<TeraType>> SuperEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>
+        private static Dictionary<TeraType, HashSet<TeraType>> DefaultSuperEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static Dictionary<TeraType, HashSet<TeraType>> DefaultNotEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static Dictionary<TeraType, HashSet<TeraType>> DefaultNoEffectType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static Dictionary<TeraType, HashSet<TeraType>> SuperEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static Dictionary<TeraType, HashSet<TeraType>> NotEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static Dictionary<TeraType, HashSet<TeraType>> NoEffectType = new Dictionary<TeraType, HashSet<TeraType>>();
+        private static bool inited = false;
+        public static void InitDefaultTeraRelation()
         {
-            {TeraType.Fighting, new HashSet<TeraType>{TeraType.Normal, TeraType.Rock, TeraType.Ice, TeraType.Steel, TeraType.Dark } },
-            {TeraType.Flying, new HashSet<TeraType>{TeraType.Bug, TeraType.Fighting, TeraType.Grass } },
-            {TeraType.Poison, new HashSet<TeraType>{TeraType.Grass, TeraType.Fairy} },
-            {TeraType.Ground, new HashSet<TeraType>{TeraType.Poison, TeraType.Fire, TeraType.Electric, TeraType.Rock, TeraType.Steel } },
-            {TeraType.Rock, new HashSet<TeraType>{TeraType.Bug, TeraType.Flying, TeraType.Fire, TeraType.Ice } },
-            {TeraType.Bug, new HashSet<TeraType>{TeraType.Grass, TeraType.Psychic, TeraType.Dark}},
-            {TeraType.Ghost, new HashSet<TeraType>{TeraType.Psychic, TeraType.Ghost } },
-            {TeraType.Steel, new HashSet<TeraType>{TeraType.Fairy, TeraType.Rock, TeraType.Ice} },
-            {TeraType.Fire, new HashSet<TeraType>{TeraType.Grass, TeraType.Ice, TeraType.Bug, TeraType.Steel } },
-            {TeraType.Water, new HashSet<TeraType>{TeraType.Ground, TeraType.Fire, TeraType.Rock} },
-            {TeraType.Grass, new HashSet<TeraType>{TeraType.Ground, TeraType.Water, TeraType.Rock} },
-            {TeraType.Electric, new HashSet<TeraType>{TeraType.Flying, TeraType.Water} },
-            {TeraType.Psychic, new HashSet<TeraType>{TeraType.Poison, TeraType.Fighting} },
-            {TeraType.Ice, new HashSet<TeraType>{TeraType.Flying, TeraType.Ground, TeraType.Grass, TeraType.Dragon} },
-            {TeraType.Dragon, new HashSet<TeraType>{TeraType.Dragon} },
-            {TeraType.Dark, new HashSet<TeraType>{TeraType.Psychic, TeraType.Ghost } },
-            {TeraType.Fairy, new HashSet<TeraType>{TeraType.Fighting, TeraType.Dragon, TeraType.Dark } },
-        };
-        private static Dictionary<TeraType, HashSet<TeraType>> NotEffectiveType = new Dictionary<TeraType, HashSet<TeraType>>
+            if (inited)
+                return;
+            inited = true;
+            var path = Path.Combine($"{TeraHelperModule.Instance.Metadata.Name}:", "tera");
+            TeraDefine[] define = null;
+            Logger.Log(nameof(TeraHelperModule), $"Loading Default Tera Relation From {path}");
+            using (FileStream fileStream = FileProxy.OpenRead(path))
+            {
+                using (StreamReader reader = new StreamReader(fileStream))
+                {
+                    try
+                    {
+                        if (!reader.EndOfStream)
+                        {
+                            define = YamlHelper.Deserializer.Deserialize<TeraDefine[]>(reader);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Logger.Log(LogLevel.Warn, nameof(TeraHelperModule), "Failed to load default tera relations");
+                    }
+                }
+            }
+            DefaultSuperEffectiveType.Clear();
+            DefaultNotEffectiveType.Clear();
+            DefaultNoEffectType.Clear();
+            if (define != null)
+            {
+                foreach (var d in define)
+                {
+                    MakeTeraRelation(d, DefaultSuperEffectiveType, DefaultNotEffectiveType, DefaultNoEffectType);
+                }
+            }
+            //LogTeraRelation(DefaultSuperEffectiveType, DefaultNotEffectiveType, DefaultNoEffectType);
+        }
+        public static void OnLoad()
         {
-            {TeraType.Normal, new HashSet<TeraType> {TeraType.Rock, TeraType.Steel} },
-            {TeraType.Fighting, new HashSet<TeraType>{TeraType.Bug, TeraType.Poison, TeraType.Flying, TeraType.Psychic, TeraType.Fairy} },
-            {TeraType.Flying, new HashSet<TeraType>{TeraType.Electric, TeraType.Rock, TeraType.Steel } },
-            {TeraType.Poison, new HashSet<TeraType>{TeraType.Poison, TeraType.Ground, TeraType.Rock, TeraType.Ghost } },
-            {TeraType.Ground, new HashSet<TeraType>{TeraType.Bug, TeraType.Grass } },
-            {TeraType.Rock, new HashSet<TeraType>{TeraType.Ground, TeraType.Fighting, TeraType.Steel } },
-            {TeraType.Bug, new HashSet<TeraType>{TeraType.Poison, TeraType.Flying, TeraType.Fighting, TeraType.Fire, TeraType.Ghost, TeraType.Steel, TeraType.Fairy} },
-            {TeraType.Ghost, new HashSet<TeraType>{TeraType.Dark } },
-            {TeraType.Steel, new HashSet<TeraType>{TeraType.Water, TeraType.Fire, TeraType.Electric, TeraType.Steel} },
-            {TeraType.Fire, new HashSet<TeraType>{TeraType.Fire, TeraType.Water, TeraType.Rock, TeraType.Dragon} },
-            {TeraType.Water, new HashSet<TeraType>{TeraType.Water, TeraType.Grass, TeraType.Dragon} },
-            {TeraType.Grass, new HashSet<TeraType>{TeraType.Bug, TeraType.Poison, TeraType.Flying, TeraType.Fire, TeraType.Grass, TeraType.Dragon, TeraType.Steel} },
-            {TeraType.Electric, new HashSet<TeraType>{TeraType.Electric, TeraType.Grass, TeraType.Dragon} },
-            {TeraType.Psychic, new HashSet<TeraType>{ TeraType.Psychic, TeraType.Steel} },
-            {TeraType.Ice, new HashSet<TeraType>{TeraType.Fire, TeraType.Water, TeraType.Ice, TeraType.Steel} },
-            {TeraType.Dragon, new HashSet<TeraType>{TeraType.Steel} },
-            {TeraType.Dark, new HashSet<TeraType>{TeraType.Fighting, TeraType.Dark, TeraType.Fairy } },
-            {TeraType.Fairy, new HashSet<TeraType>{TeraType.Poison, TeraType.Fire, TeraType.Steel} },
-        };
-        private static Dictionary<TeraType, HashSet<TeraType>> NoEffectType = new Dictionary<TeraType, HashSet<TeraType>>
+            Everest.Events.LevelLoader.OnLoadingThread += LoadTeraRelation;
+        }
+        public static void OnUnload()
         {
-            {TeraType.Normal, new HashSet<TeraType>{TeraType.Ghost } },
-            {TeraType.Fighting, new HashSet<TeraType>{TeraType.Ghost} },
-            {TeraType.Poison, new HashSet<TeraType>{TeraType.Steel} },
-            {TeraType.Ground, new HashSet<TeraType>{TeraType.Flying } },
-            {TeraType.Ghost, new HashSet<TeraType>{TeraType.Normal } },
-            {TeraType.Electric, new HashSet<TeraType> {TeraType.Ground} },
-            {TeraType.Psychic, new HashSet<TeraType>{TeraType.Dark} },
-            {TeraType.Dragon, new HashSet<TeraType>{TeraType.Fairy} },
-        };
+            Everest.Events.LevelLoader.OnLoadingThread -= LoadTeraRelation;
+        }
+        private static void LoadTeraRelation(Level level)
+        {
+            SuperEffectiveType.Clear();
+            NotEffectiveType.Clear();
+            NoEffectType.Clear();
+            InitDefaultTeraRelation();
+            var path = Path.Combine(Engine.ContentDirectory, "Maps", level.Session.MapData.Filename + ".tera.yaml");
+            if (FileProxy.Exists(path))
+            {
+                Logger.Log(nameof(TeraHelperModule), $"Loading Tera Relation From {path}");
+                TeraDefine[] define = null;
+                using (FileStream fileStream = FileProxy.OpenRead(path))
+                {
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        try
+                        {
+                            if (!reader.EndOfStream)
+                            {
+                                define = YamlHelper.Deserializer.Deserialize<TeraDefine[]>(reader);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Logger.Log(LogLevel.Warn, nameof(TeraHelperModule), $"Failed to load tera relations at {path}");
+                        }
+                    }
+                }
+                if (define == null)
+                {
+                    SuperEffectiveType.AddRange(DefaultSuperEffectiveType);
+                    NotEffectiveType.AddRange(DefaultNotEffectiveType);
+                    NoEffectType.AddRange(DefaultNoEffectType);
+                }
+                else
+                {
+                    foreach (var d in define)
+                    {
+                        MakeTeraRelation(d, SuperEffectiveType, NotEffectiveType, NoEffectType);
+                    }
+                }
+            }
+            else
+            {
+                SuperEffectiveType.AddRange(DefaultSuperEffectiveType);
+                NotEffectiveType.AddRange(DefaultNotEffectiveType);
+                NoEffectType.AddRange(DefaultNoEffectType);
+            }
+            //LogTeraRelation(SuperEffectiveType, NotEffectiveType, NoEffectType);
+        }
+
+        private static void LogTeraRelation(Dictionary<TeraType, HashSet<TeraType>> super, Dictionary<TeraType, HashSet<TeraType>> not, Dictionary<TeraType, HashSet<TeraType>> no)
+        {
+            foreach (TeraType tera in Enum.GetValues(typeof(TeraType)))
+            {
+                string str = $"Name: {tera}";
+                if (super.ContainsKey(tera))
+                {
+                    str += $"\nSuperEffective:";
+                    foreach (var t in super[tera])
+                        str += $"{t} ";
+                }
+                if (not.ContainsKey(tera))
+                {
+                    str += $"\nNotEffective:";
+                    foreach (var t in not[tera])
+                        str += $"{t} ";
+                }
+                if (no.ContainsKey(tera))
+                {
+                    str += $"\nNoEffect:";
+                    foreach (var t in no[tera])
+                        str += $"{t} ";
+                }
+                Logger.Log(nameof(TeraHelperModule), str);
+            }
+        }
+        private static void MakeTeraRelation(TeraDefine define, Dictionary<TeraType, HashSet<TeraType>> super, Dictionary<TeraType, HashSet<TeraType>> not, Dictionary<TeraType, HashSet<TeraType>> no)
+        {
+            if (Enum.TryParse(define.Tera, out TeraType tera))
+            {
+                if (define.SuperEffective != null && define.SuperEffective.Length > 0)
+                {
+                    if (!super.ContainsKey(tera))
+                        super[tera] = new HashSet<TeraType>();
+                    foreach(var s in define.SuperEffective)
+                    {
+                        if (Enum.TryParse(s, out TeraType target))
+                        {
+                            super[tera].Add(target);
+                        }
+                    }
+                }
+
+                if (define.NotEffective != null && define.NotEffective.Length > 0)
+                {
+                    if (!not.ContainsKey(tera))
+                        not[tera] = new HashSet<TeraType>();
+                    foreach (var s in define.NotEffective)
+                    {
+                        if (Enum.TryParse(s, out TeraType target))
+                        {
+                            not[tera].Add(target);
+                        }
+                    }
+                }
+
+                if (define.NoEffect != null && define.NoEffect.Length > 0)
+                {
+                    if (!no.ContainsKey(tera))
+                        no[tera] = new HashSet<TeraType>();
+                    foreach (var s in define.NoEffect)
+                    {
+                        if (Enum.TryParse(s, out TeraType target))
+                        {
+                            no[tera].Add(target);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    internal class TeraDefine
+    {
+        public string Tera = null;
+        public string[] SuperEffective = null;
+        public string[] NotEffective = null;
+        public string[] NoEffect = null;
     }
 }

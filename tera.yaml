@@ -1,0 +1,61 @@
+- Tera: Normal
+  NotEffective: [Rock, Steel]
+  NoEffect: [Ghost]
+- Tera: Fighting
+  SuperEffective: [Normal, Rock, Ice, Steel, Dark]
+  NotEffective: [Bug, Poison, Flying, Psychic, Fairy]
+  NoEffect: [Ghost]
+- Tera: Flying
+  SuperEffective: [Bug, Fighting, Grass]
+  NotEffective: [Electric, Rock, Steel]
+- Tera: Poison
+  SuperEffective: [Grass, Fairy]
+  NotEffective: [Poison, Ground, Rock, Ghost]
+  NoEffect: [Steel]
+- Tera: Ground
+  SuperEffective: [Poison, Fire, Electric, Rock, Steel]
+  NotEffective: [Bug, Grass]
+  NoEffect: [Flying]
+- Tera: Rock
+  SuperEffective: [Bug, Flying, Fire, Ice]
+  NotEffective: [Ground, Fighting, Steel]
+- Tera: Bug
+  SuperEffective: [Grass, Psychic, Dark]
+  NotEffective: [Poison, Flying, Fighting, Fire, Ghost, Steel, Fairy]
+- Tera: Ghost
+  SuperEffective: [Psychic, Ghost]
+  NotEffective: [Dark]
+  NoEffect: [Normal]
+- Tera: Steel
+  SuperEffective: [Fairy, Rock, Ice]
+  NotEffective: [Water, Fire, Electric, Steel]
+- Tera: Fire
+  SuperEffective: [Grass, Ice, Bug, Steel]
+  NotEffective: [Fire, Water, Rock, Dragon]
+- Tera: Water
+  SuperEffective: [Ground, Fire, Rock]
+  NotEffective: [Water, Grass, Dragon]
+- Tera: Grass
+  SuperEffective: [Ground, Water, Rock]
+  NotEffective: [Bug, Poison, Flying, Fire, Grass, Dragon, Steel]
+- Tera: Electric
+  SuperEffective: [Flying, Water]
+  NotEffective: [Electric, Grass, Dragon]
+  NoEffect: [Ground]
+- Tera: Psychic
+  SuperEffective: [Poison, Fighting]
+  NotEffective: [Psychic, Steel]
+  NoEffect: [Dark]
+- Tera: Ice
+  SuperEffective: [Flying, Ground, Grass, Dragon]
+  NotEffective: [Fire, Water, Ice, Steel]
+- Tera: Dragon
+  SuperEffective: [Dragon]
+  NotEffective: [Steel]
+  NoEffect: [Fairy]
+- Tera: Dark
+  SuperEffective: [Psychic, Ghost]
+  NotEffective: [Fighting, Dark, Fairy]
+- Tera: Fairy
+  SuperEffective: [Fighting, Dragon, Dark]
+  NotEffective: [Poison, Fire, Steel]

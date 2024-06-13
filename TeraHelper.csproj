@@ -31,7 +31,8 @@
     </ItemDefinitionGroup>
 
     <ItemGroup>
-        <PackageReference Include="MonoMod.RuntimeDetour" Version="22.01.04.03" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="25.1.2" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="YamlDotNet" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

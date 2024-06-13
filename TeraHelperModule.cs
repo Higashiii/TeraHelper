@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.TeraHelper.Entities;
+﻿using Celeste.Mod.TeraHelper.DataBase;
+using Celeste.Mod.TeraHelper.Entities;
 using System;
 using System.Reflection;
 
@@ -29,6 +30,7 @@ namespace Celeste.Mod.TeraHelper
         public override void Load()
         {
             // TODO: apply any hooks that should always be active
+            TeraUtil.OnLoad();
             ActiveTera.OnLoad();
             TeraBlock.OnLoad();
             TeraZipMover.OnLoad();
@@ -46,6 +48,7 @@ namespace Celeste.Mod.TeraHelper
         public override void Unload()
         {
             // TODO: unapply any hooks applied in Load()
+            TeraUtil.OnUnload();
             ActiveTera.OnUnload();
             TeraBlock.OnUnload();
             TeraZipMover.OnUnload();

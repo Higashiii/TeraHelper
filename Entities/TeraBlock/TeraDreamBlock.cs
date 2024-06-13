@@ -78,12 +78,14 @@ namespace Celeste.Mod.TeraHelper.Entities
         private static int TeraDreamUpdateSpeed(On.Celeste.Player.orig_DreamDashUpdate orig, Player self)
         {
             var playerData = DynamicData.For(self);
+            bool wasInTera = false;
             if (playerData.TryGet("dreamBlock", out DreamBlock dream))
             {
                 if (dream is TeraDreamBlock teraDream)
                 {
                     if (teraDream != null)
                     {
+                        wasInTera = true;
                         var dir = new Vector2(Math.Sign(self.Speed.X), Math.Sign(self.Speed.Y));
                         if (dir.Length() > 1)
                         {
@@ -95,7 +97,23 @@ namespace Celeste.Mod.TeraHelper.Entities
                     }
                 }
             }
-            return orig(self);
+            int res = orig(self);
+            if (res == Player.StDreamDash && wasInTera)
+            {
+                if (playerData.TryGet("dreamBlock", out DreamBlock newDream))
+                {
+                    if (newDream != null && newDream.GetType() == typeof(DreamBlock))
+                    {
+                        var dir = new Vector2(Math.Sign(self.Speed.X), Math.Sign(self.Speed.Y));
+                        if (dir.Length() > 1)
+                        {
+                            dir = dir.SafeNormalize();
+                        }
+                        self.Speed = 240f * dir;
+                    }
+                }
+            }
+            return res;
         }
         private static bool PlayerActivate(DreamBlock block)
         {

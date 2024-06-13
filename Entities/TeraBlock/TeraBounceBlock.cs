@@ -56,6 +56,26 @@ namespace Celeste.Mod.TeraHelper.Entities
                 cursor.EmitDelegate(PlayerActivate);
                 cursor.Emit(OpCodes.Brfalse, label);
             }
+            cursor.Index = 0;
+            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("event:/game/09_core/iceblock_touch")))
+            {
+                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on ice block sound at {cursor.Index} in IL for {cursor.Method.Name}");
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.EmitDelegate(GetIceTouchSound);
+            }
+        }
+        private static string GetIceTouchSound(string origSound, BounceBlock block)
+        {
+            if (block is not TeraBounceBlock teraBlock)
+                return origSound;
+            return teraBlock.lastEffect switch
+            {
+                TeraEffect.Super => "event:/TeraHelper/iceblock_touch_fast",
+                TeraEffect.Normal => origSound,
+                TeraEffect.Bad => "event:/TeraHelper/iceblock_touch_slow",
+                TeraEffect.None => origSound,
+                _ => throw new NotImplementedException()
+            };
         }
         private static bool PlayerActivate(BounceBlock block)
         {

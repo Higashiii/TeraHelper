@@ -687,6 +687,14 @@
 {7d16c138-146a-4337-97b7-777ec6146448} event:/new_content/timeline_bubble_to_remembered
 {b5fd173e-9a58-4412-9be1-094108b82157} event:/state/cafe_computer_active
 {d85a0635-cbcf-4ba3-8466-b6e24aa45894} event:/state/underwater
+{28ded2f5-0487-4d80-9d65-86127d56c41e} event:/TeraHelper/zip_mover_moon_slow
+{c9556d84-e98b-4653-b7cd-93801b7597f9} event:/TeraHelper/zip_mover_moon_fast
+{730dc0db-f944-473b-9454-98d886e38f46} event:/TeraHelper/zip_mover_slow
+{21f69841-a908-41f1-a0bb-db1614727fcf} event:/TeraHelper/zip_mover_fast
+{efbe4b68-7011-43f1-8912-c7a3e562b43d} event:/TeraHelper/cry
+{6ad10684-c281-4029-87f0-89201da42f85} event:/TeraHelper/iceblock_touch_fast
+{ac6cba95-9c04-4915-8932-1b48546ae657} event:/TeraHelper/iceblock_touch_slow
+{3b873cc4-2036-4b73-90d0-c133d8f88598} event:/TeraHelper/shiny
 {c4d2289a-859e-42e9-ba38-eee1791a3a62} event:/ui/game/chatoptions_appear
 {dd4cb027-0132-4039-9303-c9ad8589683e} event:/ui/game/chatoptions_roll_down
 {1b030b2e-c125-40d5-b582-5819c6c29584} event:/ui/game/chatoptions_roll_up
@@ -812,9 +820,8 @@
 {ca8ffe65-72eb-4fb3-9c3d-27fef47bc3d1} event:/ui/world_map/whoosh/700ms_forward
 {2dca99b6-dcf5-40e6-8cd1-c72f97d364cd} event:/ui/world_map/whoosh/900ms_back
 {21a98c43-8e79-4b8a-8963-a269735f3989} event:/ui/world_map/whoosh/900ms_forward
-{51b283ac-b3f7-4cb9-a6c5-e392aea30efb} event:/TeraHelper/cry
-{39971acb-4ab4-4de8-8a24-5e33e26e7471} event:/TeraHelper/shiny
 {ea595d6d-cb07-4897-81cb-4830bf5823cb} event:/!!!_README_FIRST
+{584e3ab4-39c9-4b27-9959-0a88570e0b5b} event:/Tsukimori
 {c7aad72f-9796-42d3-980b-d093fd765716} bus:/
 {aac396d1-a63f-418a-810a-5d5a59fb2c43} bus:/gameplay_sfx
 {2677ced7-94e4-44e2-9f5a-74aaeda5ab63} bus:/gameplay_sfx/ambience
@@ -996,8 +1003,9 @@
 {1aa61ee8-68fc-4c62-9a54-35743044bafe} snapshot:/berry_cooperation/5000s_down
 {a327f717-e8b5-4fb0-b4dd-84bd8a585fe0} bank:/dlc_music
 {e85b3c9e-428d-41b7-82c0-37814f3cbf15} bank:/dlc_sfx
+{f1d461eb-1a66-4f01-9808-76f831e19c72} bank:/Getsuyuubyou
 {7916fdbf-1253-451d-a369-6dfd34341e4e} bank:/music
 {98263171-3ea2-482b-abb7-9af01e4c002a} bank:/sfx
+{b65b2b76-bc69-432c-a749-a57a3c81c417} bank:/TeraHelper
 {f0efde81-92ec-4f1a-8b48-815f4d8a3255} bank:/ui
 {f42d1384-f9ea-4ba4-9e08-a4d067c55b3b} bank:/Master Bank
-{ce71344b-06bd-4c15-b0e0-1b711c2ee93b} bank:/TeraHelper

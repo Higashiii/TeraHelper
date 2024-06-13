@@ -62,6 +62,27 @@ namespace Celeste.Mod.TeraHelper.Entities
                 cursor.EmitDelegate(GetSpeedMultipler);
                 cursor.Emit(OpCodes.Mul);
             }
+            cursor.Index = 0;
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("event:/new_content/game/10_farewell/zip_mover") || instr.MatchLdstr("event:/game/01_forsaken_city/zip_mover")))
+            {
+                Logger.Log(nameof(TeraHelperModule), $"Injecting code to apply tera effect on zip mover sound at {cursor.Index} in IL for {cursor.Method.Name}");
+                cursor.Emit(OpCodes.Ldloc_1);
+                cursor.EmitDelegate(GetZipMoverSound);
+            }
+        }
+        private static string GetZipMoverSound(string origSound, ZipMover block)
+        {
+            if (block is not TeraZipMover teraBlock)
+                return origSound;
+            bool moon = origSound == "event:/new_content/game/10_farewell/zip_mover";
+            return teraBlock.lastEffect switch
+            {
+                TeraEffect.Super => moon ? "event:/TeraHelper/zip_mover_moon_fast" : "event:/TeraHelper/zip_mover_fast",
+                TeraEffect.Normal => origSound,
+                TeraEffect.Bad => moon ? "event:/TeraHelper/zip_mover_moon_slow" : "event:/TeraHelper/zip_mover_slow",
+                TeraEffect.None => origSound,
+                _ => throw new NotImplementedException()
+            };
         }
         private static bool PlayerActivate(ZipMover block)
         {
